@@ -1,6 +1,7 @@
 package com.techelevator.ui;
 
 import com.techelevator.Inventory.VendingMachineItems;
+import com.techelevator.application.VendingMachine;
 import com.techelevator.reader.VendingMachineBuilder;
 import com.techelevator.transaction.UserMoney;
 
@@ -14,6 +15,8 @@ import java.util.Scanner;
  * Dependencies: None
  */
 public class UserInput {
+    UserMoney userMoney = new UserMoney();
+    VendingMachine vendingMachine ;
     private Scanner scanner = new Scanner(System.in);
 
     public String getHomeScreenOption() {
@@ -53,14 +56,14 @@ public String getInputFromUser(String message){
     return userAnswer;
 }
 
-    public String getPurchaseScreenOptions(BigDecimal currentMoney) {
+    public String getPurchaseScreenOptions(BigDecimal getMoneyHeld) {
         System.out.println("###########################");
         System.out.println("(M) Feed Money");
         System.out.println("(S) Select an Item");
         System.out.println("(F) Finish Transaction");
         System.out.println("###########################");
         System.out.println();
-        System.out.println("Current Money Provided: " + (currentMoney));
+        System.out.println("Current Money Provided: " + getMoneyHeld);
         System.out.println();
         System.out.println("Please select an option?");
         System.out.println("###########################");

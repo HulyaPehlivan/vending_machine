@@ -10,8 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class AuditFile {
 
     File auditReport = new File("audit.txt");
-String dateAndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("mm/dd/yyyy h:mm:ss "));
-
+    String dateAndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss "));
     {
         try (PrintWriter writer = new PrintWriter(new FileWriter(auditReport, true))) {
             writer.println(dateAndTime + " "+" ");

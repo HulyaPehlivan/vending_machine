@@ -32,7 +32,7 @@ public class VendingMachine {
                     purchaseItem();
                 } else if (menuSelection.equals("exit")) {
                     // goodbye
-                    exit();
+                    System.exit(0);
                     break;
                 } else {
                     System.out.println("Invalid Selection");
@@ -47,13 +47,16 @@ public class VendingMachine {
     public void purchaseItem(){
 
         while(true){
-            String purchaseScreenOptions = userInput.getPurchaseScreenOptions(userMoney.getUserBalance());
+            String purchaseScreenOptions = userInput.getPurchaseScreenOptions(userMoney.getMoneyHeld());
 
             if (purchaseScreenOptions.equals("Feed Money")) {
+                userMoney.getMoneyHeld();
                 String getMoneyFromUser = userInput.getInputFromUser("Please enter dollar amount: 1, 5, 10 or 20$");
-                userMoney.getUserBalance();
-                System.out.println("test current balance " + userMoney.getUserBalance());
-                purchaseScreenOptions = userInput.getPurchaseScreenOptions(userMoney.getUserBalance());
+             //add balance
+                BigDecimal balance = userMoney.addMoney(BigDecimal.valueOf(Long.parseLong(getMoneyFromUser)));
+                System.out.println("Your current balance " + balance);
+                purchaseScreenOptions = userInput.getPurchaseScreenOptions(userMoney.getMoneyHeld());
+
 
             } if (purchaseScreenOptions.equals("Select Item")) {
                 //call purchase item.purchaseItem()
@@ -64,7 +67,7 @@ public class VendingMachine {
                 } else if (inventory.get(slotNumberFromUser).getQuantity() > 0) {//check quantity
                     userOutput.displayMessage("You want to buy " + inventory.get(slotNumberFromUser).getName() + " " + inventory.get(slotNumberFromUser).getPrice());
                    BigDecimal itemPrice = BigDecimal.valueOf(inventory.get(slotNumberFromUser).getPrice());
-                    BigDecimal leftMoney = userMoney.getWithdrawAmount(itemPrice);
+                    BigDecimal leftMoney = userMoney.subtractMoney(itemPrice);
                     if (inventory.get(slotNumberFromUser).getType().equals("Candy")){
                         inventory.get(slotNumberFromUser).itemDispensed();
                         userOutput.displayMessage(inventory.get(slotNumberFromUser).getNoise());
@@ -85,15 +88,19 @@ public class VendingMachine {
                         userOutput.displayMessage("Not enough money!");
                     }
                 } else {
-                   BigDecimal changeAmount = userMoney.getUserBalance();
+                   BigDecimal changeAmount = userMoney.getMoneyHeld();
                     userOutput.displayMessage("Your change is: " + changeAmount);
                     //end transaction. give change. 0 out vending machine money
                 }
+            }if (purchaseScreenOptions.equals("Finish Transaction")) {
+              finishTransaction();
+              System.exit(0);
             }
 
         }
 
     }
+
     public void exit(){}
 
     private Map<String, VendingMachineItems> inventory = new HashMap<>();
@@ -106,7 +113,11 @@ public class VendingMachine {
     UserOutput userOutput = new UserOutput();
 
 
-
+    public boolean finishTransaction() {
+        BigDecimal temp = userMoney.getMoneyHeld();
+        userMoney.makeChange();
+        return false;
+    }
 
 
 }
